@@ -2,7 +2,9 @@ import krpc
 import time;
 import os
 import random
-import math 
+import math
+import os
+import vlc
 
 class FalconOS:
     #controles
@@ -31,8 +33,8 @@ class FalconOS:
     _alcançou_periastro = False
     _liberou_carga = False
     _iniciou_deorbita = False
-    _ALTITUDE_DO_APOSTRO_PARA_VOO = 110 * 1000 # cento e dez mil quilomentros
-    _ALTITUDE_DO_PERIASTRO_PARA_VOO = 70 * 1000 # setenta mil quilometros
+    _ALTITUDE_DO_APOSTRO_PARA_VOO = 300 * 1000 # cento e dez mil quilomentros
+    _ALTITUDE_DO_PERIASTRO_PARA_VOO = 100 * 1000 # setenta mil quilometros
 
 
     def __init__(self):
@@ -60,7 +62,7 @@ class FalconOS:
             time.sleep(10)
             self._vessel.auto_pilot.target_pitch_and_heading(180, 90)  #90 90  
             self._iniciou_deorbita = True
-            time.sleep(10)
+            time.sleep(60)
             self._vessel.control.throttle = 1
             time.sleep(5)
             self._vessel.control.throttle = 0
@@ -84,17 +86,17 @@ class FalconOS:
     
 
     def _religar_motor_apos_chegar_no_apoastro(self):
-            if self._ALTITUDE_ATUAL() >= self._ALTITUDE_DO_APOSTRO_PARA_VOO \
+            if self._ALTITUDE_ATUAL() >= ( self._ALTITUDE_DO_APOSTRO_PARA_VOO - 1000 ) \
             and not self._alcancou_apoatro:
-                self._vessel.auto_pilot.target_pitch_and_heading(-10, 90)  #90 90  
+                self._vessel.auto_pilot.target_pitch_and_heading(0, 90)  #90 90  
                 time.sleep(5)
                 self._vessel.control.throttle = 0.6
                 self._alcancou_apoatro = True
    
     def _checar_apoastro_futuro(self):
-        if self._ALTITUDE_DO_APOASTRO_ORBITAL() >= (self._ALTITUDE_DO_APOSTRO_PARA_VOO + 1000) \
+        if self._ALTITUDE_DO_APOASTRO_ORBITAL() >= (self._ALTITUDE_DO_APOSTRO_PARA_VOO + 500) \
             and not self._alcancou_apostro_futuro \
-            and self._ALTITUDE_DO_APOASTRO_ORBITAL() <= (self._ALTITUDE_DO_APOSTRO_PARA_VOO + 1000) + 500:
+            and self._ALTITUDE_DO_APOASTRO_ORBITAL() <= (self._ALTITUDE_DO_APOSTRO_PARA_VOO + 500) + 2000:
             self._vessel.control.throttle = 0
             self._alcancou_apostro_futuro = True
             self._vessel.control.rcs = True
@@ -150,13 +152,19 @@ class FalconOS:
     
     def _contagem_regressiva(self):
         print('Contagem regresiva')
+        player = vlc.MediaPlayer("assets/countdown.mp3")
+        player.play()
+        time.sleep(2)
 
-        for x in range(2, 0, -1):
+        for x in range(10, 0, -1):
             print(f'Lançamento em ... {x}')
             time.sleep(1)
             os.system('cls')
 
+
     def _iniciar_voo(self):
+        player = vlc.MediaPlayer("assets/launch.mp3")
+        player.play()
         os.system('cls')
         print('Iniciando lançamento...')
         self._vessel.control.throttle = 1

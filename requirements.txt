@@ -1,1 +1,2 @@
 krpc
+python-vlc
