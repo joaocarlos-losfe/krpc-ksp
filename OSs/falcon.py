@@ -34,7 +34,7 @@ class FalconOS:
     _liberou_carga = False
     _iniciou_deorbita = False
     _ALTITUDE_DO_APOSTRO_PARA_VOO = 300 * 1000 # cento e dez mil quilomentros
-    _ALTITUDE_DO_PERIASTRO_PARA_VOO = 100 * 1000 # setenta mil quilometros
+    _ALTITUDE_DO_PERIASTRO_PARA_VOO = 220 * 1000 # setenta mil quilometros
 
 
     def __init__(self):
